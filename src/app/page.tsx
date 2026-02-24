@@ -235,7 +235,7 @@ export default function CodeReviewer() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
       {/* Header */}
       <header className="border-b border-zinc-800/60 bg-zinc-900/60 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
               <span className="text-2xl">🔬</span> AI Code Reviewer
@@ -255,11 +255,11 @@ export default function CodeReviewer() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <div className={`grid gap-6 ${result || reviewing ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1 max-w-3xl mx-auto"}`}>
           {/* Left: Input */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
                 <select
                   value={language}
@@ -306,7 +306,7 @@ export default function CodeReviewer() {
             <textarea
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full h-[500px] bg-zinc-900 border border-zinc-700 rounded-lg p-4 font-mono text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none leading-relaxed placeholder:text-zinc-600"
+              className="w-full h-[300px] sm:h-[500px] bg-zinc-900 border border-zinc-700 rounded-lg p-4 font-mono text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none leading-relaxed placeholder:text-zinc-600"
               placeholder="Paste your code here..."
               spellCheck={false}
             />
