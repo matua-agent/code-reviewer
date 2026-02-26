@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import type { ReviewResult } from "@/lib/types";
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
 
 const SYSTEM = `You are an expert code reviewer with deep knowledge of software engineering best practices, security vulnerabilities, and performance optimization.
 
@@ -49,15 +44,29 @@ export async function POST(req: NextRequest) {
     : `Review this code:\n\`\`\`\n${code}\n\`\`\``;
 
   try {
-    const msg = await client.messages.create({
-      model: "claude-haiku-4-5",
-      max_tokens: 2000,
-      system: SYSTEM,
-      messages: [{ role: "user", content: userMessage }],
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY!,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5",
+        max_tokens: 2000,
+        system: SYSTEM,
+        messages: [{ role: "user", content: userMessage }],
+      }),
     });
 
-    const rawText =
-      msg.content[0].type === "text" ? msg.content[0].text.trim() : "";
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Anthropic API error: ${error}`);
+    }
+
+    const data = await response.json();
+    const content = data.content[0];
+    const rawText = content.type === "text" ? content.text.trim() : "";
 
     // Parse JSON (handle potential markdown wrapping)
     let jsonStr = rawText;
